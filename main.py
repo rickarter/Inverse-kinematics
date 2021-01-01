@@ -1,5 +1,6 @@
 import pygame
 import math
+import numpy
 from vector import Vector2D
 
 #Init window
@@ -37,8 +38,11 @@ def get_intersections(position1, radius1, position2, radius2):
 
     return (intersection1, intersection2)
 
-def find_side():
-    pass
+def find_side(minimal_length, maximal_length, side1, side2):
+    for side in numpy.arange(minimal_length, maximal_length, 0.5):
+        if check_triangle_validity(i, side1, side2):
+            return side
+    return 0
 
 def resolve_ik():
     pass
@@ -46,9 +50,10 @@ def resolve_ik():
 def draw_vectors_chain(window, position, chain):
     pass
 
+print(find_side(50/2, 50, 10, 50))
 
-'''#Main loop
-fps = 60
+# Main loop
+'''fps = 60
 clock = pygame.time.Clock()
 run = True
 while run:

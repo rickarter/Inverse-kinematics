@@ -48,18 +48,21 @@ def resolve_ik():
     pass
 
 def draw_vectors_chain(window, position, chain):
-    pass
+        for vector in chain:
+            new_vector = Vector2D(vector.x + position.x, -vector.y + position.y)
+            pygame.draw.line(window, (255, 255, 255), (position.x, position.y), (new_vector.x, new_vector.y))       
+            position = new_vector
 
 print(find_side(50/2, 50, 10, 50))
-
 # Main loop
-'''fps = 60
+fps = 60
 clock = pygame.time.Clock()
 run = True
 while run:
+    pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
     draw_vectors_chain(window, Vector2D(window_width/2, window_height/2), vectors)
-    delta_time = clock.tick(fps)/1000'''
+    delta_time = clock.tick(fps)/1000

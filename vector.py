@@ -30,6 +30,9 @@ class Vector2D:
     def __mul__(self, other):
         return Vector2D(self.x * other, self.y * other)
 
+    def __truediv__(self, other):
+        return Vector2D(self.x / other, self.y / other)
+
     def __neg__(self):
         return Vector2D(-self.x, -self.y)
 
@@ -48,7 +51,7 @@ class Vector2D:
     def length(self):
         return math.hypot(self.x , self.y)
     
-    def normilized(self):
+    def normalized(self):
         return self/self.length()
 
     def sin(self):

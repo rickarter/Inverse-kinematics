@@ -5,6 +5,7 @@ class Vector2D:
         self.x = x
         self.y = y
 
+    # Overload operators
     def __repr__(self):
         return self
 
@@ -31,10 +32,19 @@ class Vector2D:
         return Vector2D(self.x * other, self.y * other)
 
     def __truediv__(self, other):
-        return Vector2D(self.x / other, self.y / other)
+        if other != 0:
+            return Vector2D(self.x / other, self.y / other)
+        else:
+            return self
 
     def __neg__(self):
         return Vector2D(-self.x, -self.y)
+
+    def __lt__(self, other):
+        return self.length() < other.length()
+
+    def __gt__(self, other):
+        return self.length() > other.length()
 
     def get_angle(self):
         result = math.asin(self.sin())
@@ -65,3 +75,22 @@ class Vector2D:
             return 0
 
         return self.x / self.length()
+
+    # Static functions
+    @staticmethod
+    def minimal(vector1, vector2):
+        if vector1 < vector2:
+            return vector1
+        else:
+            return vector2
+
+    @staticmethod
+    def maximal(vector1, vector2):
+        if vector1 > vector2:
+            return vector1
+        else:
+            return vector2
+
+    @staticmethod
+    def distance(vector1, vector2):
+        return (vector2-vector2).length()

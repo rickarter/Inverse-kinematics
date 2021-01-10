@@ -4,13 +4,13 @@ import numpy
 from vector import Vector2D
 
 #Init window
-window_width = 320*5
-window_height = 180*5
+window_width = 320*3
+window_height = 180*3
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Inverse kinematics")
 
 # Init variables
-chain = [90, 189, 15]
+chain = [61, 56, 40]
 vectors = []
 end_effector = Vector2D(0, 0)
 pole = Vector2D(0, 0)
@@ -43,10 +43,10 @@ def get_intersections(position1, radius1, position2, radius2):
     intersection1 = point + height_vector
     intersection2 = point - height_vector
 
-    position1_global = Vector2D(position1.x, -position1.y) + screen_middle_position
+    '''position1_global = Vector2D(position1.x, -position1.y) + screen_middle_position
     position2_global = Vector2D(position2.x, -position2.y) + screen_middle_position
     pygame.draw.circle(window, (255, 255, 255), (int(position1_global.x), int(position1_global.y)), int(radius1), 1)
-    pygame.draw.circle(window, (255, 255, 255), (int(position2_global.x), int(position2_global.y)), int(radius2), 1)
+    pygame.draw.circle(window, (255, 255, 255), (int(position2_global.x), int(position2_global.y)), int(radius2), 1)'''
 
     return intersection1, intersection2
 
@@ -69,9 +69,13 @@ def resolve_ik(chain, vectors, end_effector, maximal_distance, pole):
         current_side = current_side_vector.length()
         # Find possible side
         new_side = find_side(0, sum(chain[:i]), chain[i], current_side)
-
         # Find intersection nearest to the pole
-        intersections = get_intersections(current_side_vector, chain[i], Vector2D(0, 0), new_side)
+        intersections = []
+        if i != 1:
+            intersections = get_intersections(current_side_vector, chain[i], Vector2D(0, 0), new_side)
+        else:
+            intersections = get_intersections(current_side_vector, chain[i], Vector2D(0, 0), chain[0])
+
         intersection = Vector2D(0, 0)
         if intersections[0]-pole < intersections[1]-pole:
             intersection = intersections[0]
@@ -87,10 +91,14 @@ def resolve_ik(chain, vectors, end_effector, maximal_distance, pole):
 
     return new_vectors
 
-def draw_vectors_chain(window, position, chain, color):
+def draw_vectors_chain(window, position, chain, color, width=1, draw_circles=False, radius=1, circle_color=(255, 255, 255)):
         for vector in chain:
             new_vector = Vector2D(vector.x + position.x, -vector.y + position.y)
-            pygame.draw.line(window, color, (position.x, position.y), (new_vector.x, new_vector.y))       
+            pygame.draw.line(window, color, (position.x, position.y), (new_vector.x, new_vector.y), width)  
+            if draw_circles:
+                pygame.draw.circle(window, circle_color, (position.x, position.y), radius)
+                pygame.draw.circle(window, circle_color, (new_vector.x, new_vector.y), radius)
+
             position = new_vector
 
 # Main loop
@@ -102,7 +110,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    window.fill((51, 51, 51))
+    window.fill((226, 95, 91))
 
     if pygame.mouse.get_pressed()[0]:
         end_effector_global = Vector2D(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
@@ -115,12 +123,13 @@ while run:
         pole = pole_global - screen_middle_position
         pole.y *= -1
 
-    draw_vectors_chain(window, screen_middle_position, vectors, (255, 255, 255))
-    # draw_vectors_chain(window, screen_middle_position, [end_effector], (15, 153, 113))
+    # draw_vectors_chain(window, screen_middle_position, [end_effector.normalized() * maximal_distance], (15, 153, 113))
 
     # Draw pole and end effector
-    pygame.draw.circle(window, (162, 12, 122), (int(pole_global.x), int(pole_global.y)), 5)
+    pygame.draw.circle(window, (0, 242, 255), (int(pole_global.x), int(pole_global.y)), 5)
     pygame.draw.circle(window, (15, 153, 113), (int(end_effector_global.x), int(end_effector_global.y)), 5)
+
+    draw_vectors_chain(window, screen_middle_position, vectors, (255, 255, 255), width=7, draw_circles=True, circle_color=(55, 59, 68), radius=7)
 
     delta_time = clock.tick(fps)
 

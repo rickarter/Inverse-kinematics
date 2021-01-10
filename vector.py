@@ -94,3 +94,11 @@ class Vector2D:
     @staticmethod
     def distance(vector1, vector2):
         return (vector2-vector2).length()
+
+    @staticmethod
+    def perpendicular(vector):
+        return Vector2D(-vector.sin(), vector.cos())
+
+    @staticmethod
+    def list(vector):
+        return [vector.x, vector.y]

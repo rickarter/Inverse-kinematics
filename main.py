@@ -10,7 +10,7 @@ window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Inverse kinematics")
 
 # Init variables
-chain = [61, 56, 40]
+chain = [20]*50
 vectors = []
 end_effector = Vector2D(0, 0)
 pole = Vector2D(0, 0)
@@ -105,6 +105,7 @@ def draw_vectors_chain(window, position, chain, color, width=1, draw_circles=Fal
 fps = 60
 clock = pygame.time.Clock()
 run = True
+
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -123,13 +124,14 @@ while run:
         pole = pole_global - screen_middle_position
         pole.y *= -1
 
-    # draw_vectors_chain(window, screen_middle_position, [end_effector.normalized() * maximal_distance], (15, 153, 113))
+    # draw_vectors_chain(window, screen_middle_position, [end_effector.normalized() * maximal_distance], (15, 153, 113), width=4)
 
     # Draw pole and end effector
     pygame.draw.circle(window, (0, 242, 255), (int(pole_global.x), int(pole_global.y)), 5)
     pygame.draw.circle(window, (15, 153, 113), (int(end_effector_global.x), int(end_effector_global.y)), 5)
 
-    draw_vectors_chain(window, screen_middle_position, vectors, (255, 255, 255), width=7, draw_circles=True, circle_color=(55, 59, 68), radius=7)
+    draw_vectors_chain(window, screen_middle_position, vectors, (255, 255, 255), width=7, draw_circles=True, circle_color=(55, 59, 68), radius=5)
+    # draw_vectors_chain(window, screen_middle_position, vectors, (255, 255, 255))
 
     delta_time = clock.tick(fps)
 

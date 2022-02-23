@@ -10,7 +10,7 @@ window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Inverse kinematics")
 
 # Init variables
-chain = [20]*50
+chain = [50, 70, 60, 30, 20, 50, 60]
 vectors = []
 end_effector = Vector2D(0, 0)
 pole = Vector2D(0, 0)
@@ -86,6 +86,7 @@ def resolve_ik(chain, vectors, end_effector, maximal_distance, pole):
 
         # print(new_vectors.__len__())
         current_side_vector = intersection
+        print(new_side)
 
     new_vectors.insert(0, current_side_vector)
 
